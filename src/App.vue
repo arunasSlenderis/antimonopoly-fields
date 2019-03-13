@@ -1,19 +1,18 @@
 <template>
   <div id="app">
-    <FieldContainer class="field-container">
-      <!--<CityPartField/>-->
-      <!--<ActionField />-->
-      <!--<CompanyField />-->
-      <TaxField />
-    </FieldContainer>
+    <transition name="fade">
+      <FieldContainer class="container" v-if="appear">
+        <TaxField />
+      </FieldContainer>
+    </transition>
+    <br />
+    <br />
+    <button @click="appear = !appear">Toggle</button>
   </div>
 </template>
 
 <script>
 import FieldContainer from '@/components/FieldContainer';
-import CityPartField from '@/components/CityPartField';
-import ActionField from '@/components/ActionField';
-import CompanyField from '@/components/CompanyField';
 import TaxField from '@/components/TaxField';
 
 export default {
@@ -21,10 +20,13 @@ export default {
 
   components: {
     TaxField,
-    ActionField,
-    FieldContainer,
-    CityPartField,
-    CompanyField
+    FieldContainer
+  },
+
+  data() {
+    return {
+      appear: false
+    };
   }
 };
 </script>
@@ -38,9 +40,25 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 
-  .field-container {
+  .container {
     display: inline-block;
     width: 200px;
+  }
+
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: all 0.5s ease-in-out;
+  }
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
+  }
+
+  .fade-enter {
+    transform: translateX(200px);
+  }
+  .fade-leave-to {
+    transform: translateX(-200px);
   }
 }
 </style>
