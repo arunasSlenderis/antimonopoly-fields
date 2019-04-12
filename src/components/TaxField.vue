@@ -1,6 +1,6 @@
 <template>
   <div>
-    <FieldTitle title="Income Tax" />
+    <FieldTitle :title="title" />
     <FieldDescription class="field-description" :description="description" />
   </div>
 </template>
@@ -15,6 +15,13 @@ export default {
   components: {
     FieldTitle,
     FieldDescription
+  },
+
+  props: {
+    title: {
+      type: String,
+      required: true
+    }
   },
 
   data() {

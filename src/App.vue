@@ -1,13 +1,19 @@
 <template>
   <div id="app">
-    <transition name="fade">
-      <FieldContainer class="container" v-if="appear">
-        <TaxField />
-      </FieldContainer>
-    </transition>
+    <transition-group name="fade">
+      <template v-for="field in fields">
+        <FieldContainer
+          v-if="!field.hidden"
+          :key="field.title"
+          class="container"
+        >
+          <TaxField :title="field.title" />
+        </FieldContainer>
+      </template>
+    </transition-group>
     <br />
     <br />
-    <button @click="appear = !appear">Toggle</button>
+    <button @click="nextField">Toggle</button>
   </div>
 </template>
 
@@ -25,8 +31,31 @@ export default {
 
   data() {
     return {
-      appear: false
+      fields: [
+        { title: 'Field 1', hidden: false },
+        { title: 'Field 2', hidden: true },
+        { title: 'Field 3', hidden: true }
+      ],
+      visibleFieldIndex: null
     };
+  },
+
+  methods: {
+    nextField() {
+      this.fields = this.fields.map((field, index, fieldsArray) => {
+        if (!field.hidden) {
+          if (index === fieldsArray.length - 1) {
+            this.visibleFieldIndex = 0;
+          } else {
+            this.visibleFieldIndex = index + 1;
+          }
+        }
+        if (this.visibleFieldIndex === index)
+          return { ...field, hidden: false };
+
+        return { ...field, hidden: true };
+      });
+    }
   }
 };
 </script>
@@ -56,6 +85,9 @@ export default {
 
   .fade-enter {
     transform: translateX(200px);
+  }
+  .fade-enter-to {
+    transform: translateX(-100px);
   }
   .fade-leave-to {
     transform: translateX(-200px);
